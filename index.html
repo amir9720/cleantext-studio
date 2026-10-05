@@ -2,485 +2,403 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>CleanText Studio — Online Text Cleaner, AI Formatting Remover & Privacy Shield</title>
-  <meta name="description" content="Instantly clean messy AI text, strip Markdown artifacts, fix broken PDF lines, redact sensitive information, and extract emails with a single click.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanText Studio - Ultimate Free Online Text Cleaner & Converter</title>
+  <meta name="description" content="Clean, transform, and convert your text instantly. Strip invisible characters, fix broken PDF lines, convert SRT subtitles to text, clean chat logs, and format data tables.">
   <style>
     :root {
       --bg: #0b0f19;
-      --card-bg: #151d30;
-      --card-border: #22304d;
-      --accent: #38bdf8;
-      --accent-hover: #0ea5e9;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #f43f5e;
-      --success: #10b981;
-      --btn-bg: #1e293b;
-      --btn-hover: #334155;
+      --surface: #111827;
+      --card: #1f2937;
+      --border: #374151;
+      --primary: #38bdf8;
+      --primary-hover: #0284c7;
+      --accent: #10b981;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --danger: #ef4444;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding: 16px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    
+    header { text-align: center; margin: 24px 0; }
+    header h1 { font-size: 2.2rem; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+    header h1 span { color: var(--primary); }
+    header p { color: var(--text-muted); font-size: 1rem; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    .workspace { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    
+    .stats-bar { display: flex; flex-wrap: wrap; gap: 14px; background: var(--card); padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; border: 1px solid var(--border); }
+    .stats-bar strong { color: var(--primary); font-weight: 600; }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding: 16px 12px;
-    }
+    textarea { width: 100%; height: 260px; background: #030712; border: 1px solid var(--border); border-radius: 10px; color: #fff; padding: 14px; font-size: 0.95rem; resize: vertical; outline: none; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.5; }
+    textarea:focus { border-color: var(--primary); }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    .action-bar { display: flex; justify-content: space-between; align-items: center; margin: 12px 0 18px 0; flex-wrap: wrap; gap: 10px; }
+    .primary-actions { display: flex; gap: 8px; }
 
-    header {
-      text-align: center;
-      margin-bottom: 24px;
-      padding-top: 8px;
-    }
+    /* Tabs */
+    .tab-nav { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 14px; overflow-x: auto; }
+    .tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 8px 14px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: all 0.2s; }
+    .tab-btn.active { background: var(--card); color: var(--primary); border: 1px solid var(--border); }
+    .tab-content { display: none; }
+    .tab-content.active { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    header h1 {
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
+    /* Button styles */
+    button.tool-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 13px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: 0.15s; }
+    button.tool-btn:hover { background: var(--border); border-color: var(--primary); }
+    button.btn-copy { background: var(--primary); color: #0b0f19; font-weight: 600; border: none; padding: 9px 18px; border-radius: 6px; cursor: pointer; }
+    button.btn-copy:hover { background: var(--primary-hover); }
+    button.btn-clear { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); padding: 9px 16px; border-radius: 6px; cursor: pointer; }
+    button.btn-clear:hover { background: var(--danger); color: #fff; }
 
-    header h1 span {
-      color: var(--accent);
-    }
+    /* Content Area for AdSense */
+    article { margin-top: 36px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+    article h2 { color: var(--primary); font-size: 1.35rem; margin-top: 20px; margin-bottom: 8px; }
+    article h2:first-of-type { margin-top: 0; }
+    article p { color: #d1d5db; font-size: 0.95rem; margin-bottom: 12px; }
+    article ul { margin-left: 20px; color: #d1d5db; margin-bottom: 16px; font-size: 0.95rem; }
+    article li { margin-bottom: 6px; }
 
-    header p {
-      color: var(--text-muted);
-      margin-top: 6px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      padding: 0 8px;
-    }
-
-    .app-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
-    }
-
-    .stats-bar {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 12px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      background: #0b1120;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-    }
-
-    .stats-bar span b {
-      color: var(--accent);
-    }
-
-    textarea {
-      width: 100%;
-      height: 180px;
-      min-height: 150px;
-      background: #080d18;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 14px;
-      color: var(--text);
-      font-size: 16px; /* Prevents auto-zoom on iOS */
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    textarea:focus {
-      border-color: var(--accent);
-    }
-
-    .actions-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    @media (min-width: 480px) {
-      .actions-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (min-width: 768px) {
-      .actions-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      body {
-        padding: 28px 16px;
-      }
-      header h1 {
-        font-size: 2.4rem;
-      }
-      header p {
-        font-size: 1.1rem;
-      }
-      .app-card {
-        padding: 24px;
-      }
-      textarea {
-        height: 220px;
-      }
-    }
-
-    button {
-      background: var(--btn-bg);
-      color: var(--text);
-      border: 1px solid var(--card-border);
-      min-height: 46px; /* Accessible touch target */
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.88rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease-in-out;
-      user-select: none;
-    }
-
-    button:active {
-      transform: scale(0.98);
-      background: var(--btn-hover);
-    }
-
-    button.primary {
-      background: var(--accent);
-      color: #0b0f19;
-      border-color: var(--accent);
-    }
-
-    button.primary:active {
-      background: var(--accent-hover);
-    }
-
-    button.secondary {
-      background: #1e1b4b;
-      color: #c7d2fe;
-      border-color: #4338ca;
-    }
-
-    .bottom-bar {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    @media (min-width: 480px) {
-      .bottom-bar {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-    }
-
-    .btn-group {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 8px;
-      width: 100%;
-    }
-
-    @media (min-width: 480px) {
-      .btn-group {
-        display: flex;
-        width: auto;
-      }
-    }
-
-    .badge-alert {
-      font-size: 0.85rem;
-      color: var(--success);
-      font-weight: bold;
-      text-align: center;
-      min-height: 20px;
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .badge-alert.show {
-      opacity: 1;
-    }
-
-    /* AdSense & SEO Content Area */
-    .content-section {
-      margin-top: 32px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 20px 16px;
-    }
-
-    @media (min-width: 768px) {
-      .content-section {
-        margin-top: 48px;
-        padding: 32px;
-      }
-    }
-
-    .content-section h2 {
-      font-size: 1.3rem;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-
-    .content-section p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 16px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    @media (min-width: 600px) {
-      .features-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-    }
-
-    .feature-item {
-      background: #080d18;
-      padding: 14px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-    }
-
-    .feature-item h3 {
-      font-size: 1rem;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-
-    .feature-item p {
-      font-size: 0.85rem;
-      margin-bottom: 0;
-      line-height: 1.4;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 32px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      padding-bottom: 24px;
-    }
-
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      margin: 0 6px;
-      display: inline-block;
-      padding: 4px;
-    }
+    footer { text-align: center; margin: 40px 0 20px; font-size: 0.85rem; color: var(--text-muted); }
+    footer a { color: var(--primary); text-decoration: none; margin: 0 8px; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <h1>CleanText <span>Studio</span></h1>
-      <p>Clean AI artifacts, repair broken PDF lines, and sanitize sensitive text with one touch.</p>
-    </header>
+<div class="container">
+  <header>
+    <h1>CleanText <span>Studio</span></h1>
+    <p>All-in-one text transformation suite, format conversion & sanitization tool</p>
+  </header>
 
-    <div class="app-card">
-      <div class="stats-bar">
-        <span>Words: <b id="wordCount">0</b></span>
-        <span>Chars: <b id="charCount">0</b></span>
-        <span>Time: <b id="readTime">0m</b></span>
-      </div>
-
-      <textarea id="inputText" placeholder="Paste your messy text or AI reply here..."></textarea>
-
-      <div class="actions-grid">
-        <button class="primary" onclick="cleanAIFootprints()">⚡ Clean AI Artifacts</button>
-        <button onclick="fixBrokenLines()">📄 Fix PDF Linebreaks</button>
-        <button onclick="removeExtraSpaces()">🧹 Remove Extra Spaces</button>
-        <button class="secondary" onclick="redactSensitiveData()">🔒 Redact Phone / Email</button>
-        <button onclick="extractEmails()">📧 Extract Emails</button>
-        <button onclick="extractLinks()">🔗 Extract URLs</button>
-        <button onclick="toTitleCase()">🔠 Title Case</button>
-        <button onclick="toSentenceCase()">🔤 Sentence Case</button>
-      </div>
-
-      <div class="bottom-bar">
-        <div class="badge-alert" id="statusMsg">Copied to clipboard!</div>
-        <div class="btn-group">
-          <button style="background: transparent;" onclick="clearAll()">Clear</button>
-          <button class="primary" onclick="copyResult()">📋 Copy Text</button>
-        </div>
-      </div>
+  <div class="workspace">
+    <div class="stats-bar">
+      <span>Words: <strong id="valWords">0</strong></span>
+      <span>Characters: <strong id="valChars">0</strong></span>
+      <span>Lines: <strong id="valLines">0</strong></span>
+      <span>Reading Time: <strong id="valReading">0s</strong></span>
     </div>
 
-    <div class="content-section">
-      <h2>Professional Text Formatting Utility</h2>
-      <p>Copying content from chatbots, messaging apps, and mobile PDF documents often introduces broken linebreaks, odd Unicode symbols, and trailing markdown syntax. CleanText Studio fixes formatting issues entirely in your browser.</p>
-      
-      <div class="features-grid">
-        <div class="feature-item">
-          <h3>AI Footprint Cleaner</h3>
-          <p>Instantly strips markdown asterisks (`**`), code ticks, and conversational robotic phrases from chatbot outputs.</p>
-        </div>
-        <div class="feature-item">
-          <h3>PDF Formatting Repair</h3>
-          <p>Smooths out fragmented sentences caused by mobile document viewers and copy-paste column boundaries.</p>
-        </div>
-        <div class="feature-item">
-          <h3>Client-Side Privacy Redaction</h3>
-          <p>Masks sensitive identifiers like telephone numbers and emails before forwarding content or capturing screenshots.</p>
-        </div>
-        <div class="feature-item">
-          <h3>Link & Contact Extractor</h3>
-          <p>Extracts all hidden URLs and email addresses from raw meeting notes and chat logs in a single tap.</p>
-        </div>
+    <textarea id="mainInput" placeholder="Paste your dirty text, subtitles, logs, or lists here..."></textarea>
+
+    <div class="action-bar">
+      <div class="primary-actions">
+        <button class="btn-copy" onclick="copyResult()">Copy Cleaned Text</button>
+        <button class="btn-clear" onclick="clearAll()">Clear</button>
       </div>
+      <span id="toastMsg" style="font-size: 0.85rem; color: var(--accent); display: none;">Copied to clipboard!</span>
     </div>
 
-    <footer>
-      <p>© 2026 CleanText Studio. High efficiency text cleaner.</p>
-      <p>
-        <a href="#about" onclick="alert('CleanText Studio processes all operations in your device browser for optimal speed and privacy.')">About</a> | 
-        <a href="#privacy" onclick="alert('Privacy Guarantee: Text is processed strictly in your local memory. No data is stored, tracked, or sent to any server.')">Privacy Policy</a> | 
-        <a href="#terms" onclick="alert('Free to use for personal and commercial workflows.')">Terms</a>
-      </p>
-    </footer>
+    <!-- Category Tabs -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('clean')">Clean & Sanitize</button>
+      <button class="tab-btn" onclick="switchTab('formatters')">Unique Format Converters</button>
+      <button class="tab-btn" onclick="switchTab('cases')">Letter & Code Casing</button>
+      <button class="tab-btn" onclick="switchTab('lists')">Lists & Sorting</button>
+      <button class="tab-btn" onclick="switchTab('privacy')">Privacy & Links</button>
+    </div>
+
+    <!-- Clean Tab -->
+    <div id="tab-clean" class="tab-content active">
+      <button class="tool-btn" onclick="removeExtraSpaces()">Remove Extra Spaces</button>
+      <button class="tool-btn" onclick="removeEmptyLines()">Remove Empty Lines</button>
+      <button class="tool-btn" onclick="stripInvisibleChars()">Strip Invisible / Zero-Width Chars</button>
+      <button class="tool-btn" onclick="fixPdfLineBreaks()">Fix Broken PDF Lines</button>
+      <button class="tool-btn" onclick="stripMarkdown()">Strip AI Markdown (*, #, `)</button>
+      <button class="tool-btn" onclick="stripHtmlTags()">Strip All HTML Markup</button>
+    </div>
+
+    <!-- Unique Format Converters Tab -->
+    <div id="tab-formatters" class="tab-content">
+      <button class="tool-btn" onclick="convertSrtToText()">SRT Subtitle to Clean Text</button>
+      <button class="tool-btn" onclick="cleanChatLogs()">Chat Log to Script (WhatsApp/Telegram)</button>
+      <button class="tool-btn" onclick="listToMarkdownTable()">CSV / List to Markdown Table</button>
+      <button class="tool-btn" onclick="escapeJsonString()">Escape String for Code (JSON-safe)</button>
+      <button class="tool-btn" onclick="convertDigitsEn()">Convert Non-English Digits to 0-9</button>
+    </div>
+
+    <!-- Cases Tab -->
+    <div id="tab-cases" class="tab-content">
+      <button class="tool-btn" onclick="changeCase('upper')">UPPERCASE</button>
+      <button class="tool-btn" onclick="changeCase('lower')">lowercase</button>
+      <button class="tool-btn" onclick="changeCase('title')">Title Case</button>
+      <button class="tool-btn" onclick="toCamelCase()">camelCase</button>
+      <button class="tool-btn" onclick="toSnakeCase()">snake_case</button>
+      <button class="tool-btn" onclick="toKebabCase()">kebab-case</button>
+    </div>
+
+    <!-- Lists Tab -->
+    <div id="tab-lists" class="tab-content">
+      <button class="tool-btn" onclick="deduplicateLines()">Remove Duplicate Lines</button>
+      <button class="tool-btn" onclick="sortLinesAlpha()">Sort Alphabetically (A-Z)</button>
+      <button class="tool-btn" onclick="sortLinesLength()">Sort by Length (Short to Long)</button>
+      <button class="tool-btn" onclick="reverseLines()">Reverse Line Order</button>
+      <button class="tool-btn" onclick="addLineNumbers()">Add Line Numbers</button>
+      <button class="tool-btn" onclick="trimEachLine()">Trim Line Ends</button>
+    </div>
+
+    <!-- Privacy Tab -->
+    <div id="tab-privacy" class="tab-content">
+      <button class="tool-btn" onclick="maskPII()">Mask Sensitive Info (Emails, Phones)</button>
+      <button class="tool-btn" onclick="stripUrlTrackers()">Strip Tracking Codes from URLs</button>
+      <button class="tool-btn" onclick="extractUrlsOnly()">Extract All URLs</button>
+    </div>
   </div>
 
-  <script>
-    const input = document.getElementById('inputText');
-    const wordCount = document.getElementById('wordCount');
-    const charCount = document.getElementById('charCount');
-    const readTime = document.getElementById('readTime');
-    const statusMsg = document.getElementById('statusMsg');
+  <!-- AdSense Content Architecture -->
+  <article>
+    <h2>What is CleanText Studio?</h2>
+    <p>CleanText Studio is a high-speed, client-side utility designed for copywriters, developers, data analysts, and students. It eliminates formatting quirks, sanitizes sensitive data, and converts non-standard text structures into production-ready formats without sending your sensitive information to any cloud servers.</p>
 
-    input.addEventListener('input', updateStats);
+    <h2>Why Clean and Standardize Text?</h2>
+    <ul>
+      <li><strong>PDF Formatting Artifacts:</strong> Copying paragraphs from PDF files often results in ragged, jagged line breaks at unpredictable margins. Our PDF cleaner restores uniform paragraph flow seamlessly.</li>
+      <li><strong>Developer & Data Operations:</strong> Strip zero-width Unicode characters, escape complex multiline strings into JSON parameters, or convert raw CSV lists into GitHub-compatible Markdown tables instantly.</li>
+      <li><strong>AI & LLM Sanitization:</strong> Easily remove asterisks, hash headers, and bold formatting symbols injected by chat assistants before pasting them into clean emails or formal documents.</li>
+      <li><strong>Subtitles to Articles:</strong> Turn timestamped `.srt` or `.vtt` movie subtitle files into readable prose or book drafts in a single second.</li>
+    </ul>
 
-    function updateStats() {
-      const text = input.value.trim();
-      const words = text ? text.split(/\s+/).length : 0;
-      const chars = input.value.length;
-      const minutes = Math.ceil(words / 200);
+    <h2>Privacy & Security Guarantee</h2>
+    <p>All operations are handled entirely through modern JavaScript inside your local web browser. Your inputs, documents, and credentials never cross the network or touch remote databases, making it compliant with strict confidentiality policies.</p>
+  </article>
 
-      wordCount.innerText = words;
-      charCount.innerText = chars;
-      readTime.innerText = `${minutes}m`;
-    }
+  <footer>
+    <p>&copy; 2026 CleanText Studio. All rights reserved.</p>
+    <p>
+      <a href="about.html">About</a> | 
+      <a href="privacy.html">Privacy Policy</a> | 
+      <a href="terms.html">Terms of Service</a> | 
+      <a href="contact.html">Contact Us</a>
+    </p>
+  </footer>
+</div>
 
-    function showStatus(msg) {
-      statusMsg.innerText = msg;
-      statusMsg.classList.add('show');
-      setTimeout(() => statusMsg.classList.remove('show'), 2000);
-    }
+<script>
+  const el = document.getElementById('mainInput');
 
-    function cleanAIFootprints() {
-      let t = input.value;
-      t = t.replace(/\*\*([^*]+)\*\*/g, '$1');
-      t = t.replace(/\*([^*]+)\*/g, '$1');
-      t = t.replace(/`([^`]+)`/g, '$1');
-      t = t.replace(/^(Certainly!|Sure thing!|Here is the summary:|Here is a breakdown|As an AI language model)[^\n]*\n+/gim, '');
-      input.value = t.trim();
-      updateStats();
-      showStatus('AI artifacts removed!');
-    }
+  function updateMetrics() {
+    const raw = el.value;
+    document.getElementById('valChars').textContent = raw.length;
+    const words = raw.trim() ? raw.trim().split(/\s+/).length : 0;
+    document.getElementById('valWords').textContent = words;
+    const lines = raw ? raw.split(/\r\n|\r|\n/).length : 0;
+    document.getElementById('valLines').textContent = lines;
+    const readSecs = Math.ceil((words / 200) * 60);
+    document.getElementById('valReading').textContent = readSecs > 60 ? Math.ceil(readSecs/60) + 'm' : readSecs + 's';
+  }
+  el.addEventListener('input', updateMetrics);
 
-    function fixBrokenLines() {
-      let t = input.value;
-      t = t.replace(/([^\n])\n([^\n])/g, '$1 $2');
-      input.value = t;
-      updateStats();
-      showStatus('Linebreaks unified!');
-    }
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
 
-    function removeExtraSpaces() {
-      let t = input.value.replace(/[ \t]+/g, ' ');
-      t = t.replace(/\n\s*\n/g, '\n\n');
-      input.value = t.trim();
-      updateStats();
-      showStatus('Extra spaces cleared!');
-    }
+  function flashToast() {
+    const t = document.getElementById('toastMsg');
+    t.style.display = 'inline';
+    setTimeout(() => { t.style.display = 'none'; }, 2000);
+  }
 
-    function redactSensitiveData() {
-      let t = input.value;
-      t = t.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[EMAIL REDACTED]');
-      t = t.replace(/(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[PHONE REDACTED]');
-      input.value = t;
-      updateStats();
-      showStatus('Sensitive data masked!');
-    }
+  function copyResult() {
+    el.select();
+    navigator.clipboard.writeText(el.value);
+    flashToast();
+  }
 
-    function extractEmails() {
-      const matches = input.value.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g);
-      input.value = matches ? [...new Set(matches)].join('\n') : 'No email addresses detected.';
-      updateStats();
-      showStatus('Emails extracted!');
-    }
+  function clearAll() {
+    el.value = '';
+    updateMetrics();
+  }
 
-    function extractLinks() {
-      const matches = input.value.match(/https?:\/\/[^\s]+/g);
-      input.value = matches ? [...new Set(matches)].join('\n') : 'No URLs detected.';
-      updateStats();
-      showStatus('Links extracted!');
-    }
+  // --- Cleaners ---
+  function removeExtraSpaces() {
+    el.value = el.value.replace(/[ \t]+/g, ' ').replace(/^ +| +$/gm, '');
+    updateMetrics();
+  }
 
-    function toTitleCase() {
-      input.value = input.value.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-      updateStats();
-      showStatus('Title case applied!');
-    }
+  function removeEmptyLines() {
+    el.value = el.value.split(/\r?\n/).filter(line => line.trim() !== '').join('\n');
+    updateMetrics();
+  }
 
-    function toSentenceCase() {
-      input.value = input.value.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, (c) => c.toUpperCase());
-      updateStats();
-      showStatus('Sentence case applied!');
-    }
+  function stripInvisibleChars() {
+    // Strips zero-width spaces, joiners, non-joiners, BOM, and hidden directional control marks
+    el.value = el.value.replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u00A0]/g, ' ');
+    updateMetrics();
+  }
 
-    function clearAll() {
-      input.value = '';
-      updateStats();
-      showStatus('Cleared');
-    }
+  function fixPdfLineBreaks() {
+    // Glues lines broken awkwardly unless preceded by sentence-ending punctuation
+    el.value = el.value.replace(/([^\.\?\!\:\n])\r?\n([^\r\n])/g, '$1 $2');
+    updateMetrics();
+  }
 
-    function copyResult() {
-      if (!input.value) return;
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(input.value).then(() => {
-          showStatus('Copied to clipboard!');
-        });
-      } else {
-        input.select();
-        document.execCommand('copy');
-        showStatus('Copied to clipboard!');
+  function stripMarkdown() {
+    el.value = el.value
+      .replace(/(\*\*|__)(.*?)\1/g, '$2')
+      .replace(/(\*|_)(.*?)\1/g, '$2')
+      .replace(/`{1,3}(.*?)(`{1,3}|$)/gs, '$1')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^\s*[-*+]\s+/gm, '');
+    updateMetrics();
+  }
+
+  function stripHtmlTags() {
+    const d = document.createElement('div');
+    d.innerHTML = el.value;
+    el.value = d.textContent || d.innerText || '';
+    updateMetrics();
+  }
+
+  // --- Format Converters ---
+  function convertSrtToText() {
+    // Removes SRT numbers and timestamps (00:00:00,000 --> 00:00:00,000)
+    let cleaned = el.value
+      .replace(/^\d+\s*$/gm, '')
+      .replace(/^\d{2}:\d{2}:\d{2}[,\.]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[,\.]\d{3}.*$/gm, '')
+      .replace(/<[^>]*>/g, '');
+    el.value = cleaned.split(/\r?\n/).filter(l => l.trim() !== '').join(' ');
+    updateMetrics();
+  }
+
+  function cleanChatLogs() {
+    // Strips timestamps like [12/04/2026, 10:30] or 10:30 AM - Name:
+    el.value = el.value
+      .replace(/^\[?(\d{1,4}[-\/\.]\d{1,2}[-\/\.]\d{1,4})?,?\s*(\d{1,2}:\d{2}(:\d{2})?(\s?[APap][Mm])?)\]?\s*(-|–)?\s*/gm, '');
+    updateMetrics();
+  }
+
+  function listToMarkdownTable() {
+    const lines = el.value.trim().split(/\r?\n/);
+    if (!lines.length) return;
+    const separator = lines[0].includes('\t') ? '\t' : (lines[0].includes(',') ? ',' : '|');
+    const headerRow = lines[0].split(separator).map(s => s.trim());
+    const divider = headerRow.map(() => '---');
+    
+    let table = '| ' + headerRow.join(' | ') + ' |\n';
+    table += '| ' + divider.join(' | ') + ' |\n';
+    
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim()) {
+        const row = lines[i].split(separator).map(s => s.trim());
+        table += '| ' + row.join(' | ') + ' |\n';
       }
     }
-  </script>
+    el.value = table;
+    updateMetrics();
+  }
+
+  function escapeJsonString() {
+    el.value = JSON.stringify(el.value);
+    updateMetrics();
+  }
+
+  function convertDigitsEn() {
+    const faAr = '۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩';
+    const en = '01234567890123456789';
+    el.value = el.value.replace(/[\u0660-\u0669\u06F0-\u06F9]/g, c => en[faAr.indexOf(c)]);
+    updateMetrics();
+  }
+
+  // --- Cases ---
+  function changeCase(type) {
+    if (type === 'upper') el.value = el.value.toUpperCase();
+    if (type === 'lower') el.value = el.value.toLowerCase();
+    if (type === 'title') {
+      el.value = el.value.replace(/\b\w+/g, s => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase());
+    }
+    updateMetrics();
+  }
+
+  function toCamelCase() {
+    el.value = el.value
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
+      .replace(/^[A-Z]/, c => c.toLowerCase());
+    updateMetrics();
+  }
+
+  function toSnakeCase() {
+    el.value = el.value
+      .replace(/\W+/g, " ")
+      .trim()
+      .replace(/\s+/g, "_")
+      .toLowerCase();
+    updateMetrics();
+  }
+
+  function toKebabCase() {
+    el.value = el.value
+      .replace(/\W+/g, " ")
+      .trim()
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+    updateMetrics();
+  }
+
+  // --- Lists & Sorting ---
+  function deduplicateLines() {
+    const lines = el.value.split(/\r?\n/);
+    el.value = Array.from(new Set(lines)).join('\n');
+    updateMetrics();
+  }
+
+  function sortLinesAlpha() {
+    el.value = el.value.split(/\r?\n/).sort((a,b) => a.localeCompare(b)).join('\n');
+    updateMetrics();
+  }
+
+  function sortLinesLength() {
+    el.value = el.value.split(/\r?\n/).sort((a,b) => a.length - b.length).join('\n');
+    updateMetrics();
+  }
+
+  function reverseLines() {
+    el.value = el.value.split(/\r?\n/).reverse().join('\n');
+    updateMetrics();
+  }
+
+  function addLineNumbers() {
+    el.value = el.value.split(/\r?\n/).map((l, i) => `${i + 1}. ${l}`).join('\n');
+    updateMetrics();
+  }
+
+  function trimEachLine() {
+    el.value = el.value.split(/\r?\n/).map(l => l.trim()).join('\n');
+    updateMetrics();
+  }
+
+  // --- Privacy & Links ---
+  function maskPII() {
+    el.value = el.value
+      .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, '[PROTECTED_EMAIL]')
+      .replace(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g, '[PROTECTED_PHONE]');
+    updateMetrics();
+  }
+
+  function stripUrlTrackers() {
+    // Strips tracking markers like ?utm_*, &fbclid=, etc.
+    el.value = el.value.replace(/https?:\/\/[^\s]+/g, (url) => {
+      try {
+        let u = new URL(url);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid', 'si'].forEach(p => u.searchParams.delete(p));
+        return u.toString();
+      } catch(e) { return url; }
+    });
+    updateMetrics();
+  }
+
+  function extractUrlsOnly() {
+    const urls = el.value.match(/https?:\/\/[^\s]+/g) || [];
+    el.value = urls.join('\n');
+    updateMetrics();
+  }
+</script>
+
 </body>
 </html>
