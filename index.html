@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CleanText Studio - Ultimate Free Online Text Cleaner & Converter</title>
-  <meta name="description" content="Clean, transform, and convert your text instantly. Strip invisible characters, fix broken PDF lines, convert SRT subtitles to text, clean chat logs, and format data tables.">
+  <title>CleanText Studio - Text Cleaner, Format Converter & Creative Tools</title>
+  <meta name="description" content="Clean, transform, and convert your text instantly. Strip invisible characters, fix broken PDF lines, convert SRT subtitles to text, clean chat logs, or generate fun fancy text and ciphers.">
   <style>
     :root {
       --bg: #0b0f19;
@@ -14,6 +14,8 @@
       --primary: #38bdf8;
       --primary-hover: #0284c7;
       --accent: #10b981;
+      --fun: #f43f5e;
+      --fun-hover: #e11d48;
       --text: #f3f4f6;
       --text-muted: #9ca3af;
       --danger: #ef4444;
@@ -42,12 +44,14 @@
     .tab-nav { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 14px; overflow-x: auto; }
     .tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 8px 14px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border-radius: 6px; white-space: nowrap; transition: all 0.2s; }
     .tab-btn.active { background: var(--card); color: var(--primary); border: 1px solid var(--border); }
+    .tab-btn.fun-tab.active { color: var(--fun); border-color: var(--fun); }
     .tab-content { display: none; }
     .tab-content.active { display: flex; flex-wrap: wrap; gap: 8px; }
 
     /* Button styles */
     button.tool-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 13px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: 0.15s; }
     button.tool-btn:hover { background: var(--border); border-color: var(--primary); }
+    button.tool-btn.fun-btn:hover { border-color: var(--fun); color: #fff; }
     button.btn-copy { background: var(--primary); color: #0b0f19; font-weight: 600; border: none; padding: 9px 18px; border-radius: 6px; cursor: pointer; }
     button.btn-copy:hover { background: var(--primary-hover); }
     button.btn-clear { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); padding: 9px 16px; border-radius: 6px; cursor: pointer; }
@@ -71,7 +75,7 @@
 <div class="container">
   <header>
     <h1>CleanText <span>Studio</span></h1>
-    <p>All-in-one text transformation suite, format conversion & sanitization tool</p>
+    <p>All-in-one text transformation suite, format conversion & creative tools</p>
   </header>
 
   <div class="workspace">
@@ -82,11 +86,11 @@
       <span>Reading Time: <strong id="valReading">0s</strong></span>
     </div>
 
-    <textarea id="mainInput" placeholder="Paste your dirty text, subtitles, logs, or lists here..."></textarea>
+    <textarea id="mainInput" placeholder="Paste your text, subtitles, logs, or lists here..."></textarea>
 
     <div class="action-bar">
       <div class="primary-actions">
-        <button class="btn-copy" onclick="copyResult()">Copy Cleaned Text</button>
+        <button class="btn-copy" onclick="copyResult()">Copy Output</button>
         <button class="btn-clear" onclick="clearAll()">Clear</button>
       </div>
       <span id="toastMsg" style="font-size: 0.85rem; color: var(--accent); display: none;">Copied to clipboard!</span>
@@ -95,29 +99,30 @@
     <!-- Category Tabs -->
     <div class="tab-nav">
       <button class="tab-btn active" onclick="switchTab('clean')">Clean & Sanitize</button>
-      <button class="tab-btn" onclick="switchTab('formatters')">Unique Format Converters</button>
+      <button class="tab-btn" onclick="switchTab('formatters')">Format Converters</button>
       <button class="tab-btn" onclick="switchTab('cases')">Letter & Code Casing</button>
       <button class="tab-btn" onclick="switchTab('lists')">Lists & Sorting</button>
       <button class="tab-btn" onclick="switchTab('privacy')">Privacy & Links</button>
+      <button class="tab-btn fun-tab" onclick="switchTab('fun')">✨ Fun & Creative</button>
     </div>
 
     <!-- Clean Tab -->
     <div id="tab-clean" class="tab-content active">
       <button class="tool-btn" onclick="removeExtraSpaces()">Remove Extra Spaces</button>
       <button class="tool-btn" onclick="removeEmptyLines()">Remove Empty Lines</button>
-      <button class="tool-btn" onclick="stripInvisibleChars()">Strip Invisible / Zero-Width Chars</button>
+      <button class="tool-btn" onclick="stripInvisibleChars()">Strip Invisible Chars</button>
       <button class="tool-btn" onclick="fixPdfLineBreaks()">Fix Broken PDF Lines</button>
       <button class="tool-btn" onclick="stripMarkdown()">Strip AI Markdown (*, #, `)</button>
-      <button class="tool-btn" onclick="stripHtmlTags()">Strip All HTML Markup</button>
+      <button class="tool-btn" onclick="stripHtmlTags()">Strip HTML Markup</button>
     </div>
 
     <!-- Unique Format Converters Tab -->
     <div id="tab-formatters" class="tab-content">
       <button class="tool-btn" onclick="convertSrtToText()">SRT Subtitle to Clean Text</button>
-      <button class="tool-btn" onclick="cleanChatLogs()">Chat Log to Script (WhatsApp/Telegram)</button>
+      <button class="tool-btn" onclick="cleanChatLogs()">Chat Log to Clean Script</button>
       <button class="tool-btn" onclick="listToMarkdownTable()">CSV / List to Markdown Table</button>
-      <button class="tool-btn" onclick="escapeJsonString()">Escape String for Code (JSON-safe)</button>
-      <button class="tool-btn" onclick="convertDigitsEn()">Convert Non-English Digits to 0-9</button>
+      <button class="tool-btn" onclick="escapeJsonString()">Escape String for Code</button>
+      <button class="tool-btn" onclick="convertDigitsEn()">Convert Digits to 0-9</button>
     </div>
 
     <!-- Cases Tab -->
@@ -134,7 +139,7 @@
     <div id="tab-lists" class="tab-content">
       <button class="tool-btn" onclick="deduplicateLines()">Remove Duplicate Lines</button>
       <button class="tool-btn" onclick="sortLinesAlpha()">Sort Alphabetically (A-Z)</button>
-      <button class="tool-btn" onclick="sortLinesLength()">Sort by Length (Short to Long)</button>
+      <button class="tool-btn" onclick="sortLinesLength()">Sort by Length</button>
       <button class="tool-btn" onclick="reverseLines()">Reverse Line Order</button>
       <button class="tool-btn" onclick="addLineNumbers()">Add Line Numbers</button>
       <button class="tool-btn" onclick="trimEachLine()">Trim Line Ends</button>
@@ -146,19 +151,29 @@
       <button class="tool-btn" onclick="stripUrlTrackers()">Strip Tracking Codes from URLs</button>
       <button class="tool-btn" onclick="extractUrlsOnly()">Extract All URLs</button>
     </div>
+
+    <!-- Fun & Creative Tab -->
+    <div id="tab-fun" class="tab-content">
+      <button class="tool-btn fun-btn" onclick="toUpsideDown()">Upside Down ɐǝ</button>
+      <button class="tool-btn fun-btn" onclick="toZalgo()">Zalgo Glitched Text</button>
+      <button class="tool-btn fun-btn" onclick="toMockingCase()">sPoNgEbOb CaSe</button>
+      <button class="tool-btn fun-btn" onclick="toMorseCode()">Morse Code (... --- ...)</button>
+      <button class="tool-btn fun-btn" onclick="toBinary()">Text to Binary (0101)</button>
+      <button class="tool-btn fun-btn" onclick="scrambleWords()">Scramble Words Puzzle</button>
+      <button class="tool-btn fun-btn" onclick="textToEmoji()">Text to Emojis</button>
+    </div>
   </div>
 
   <!-- AdSense Content Architecture -->
   <article>
     <h2>What is CleanText Studio?</h2>
-    <p>CleanText Studio is a high-speed, client-side utility designed for copywriters, developers, data analysts, and students. It eliminates formatting quirks, sanitizes sensitive data, and converts non-standard text structures into production-ready formats without sending your sensitive information to any cloud servers.</p>
+    <p>CleanText Studio is a high-speed, client-side utility designed for copywriters, developers, data analysts, students, and digital creators. It eliminates formatting quirks, sanitizes sensitive data, and converts non-standard text structures into production-ready formats without sending information across the network.</p>
 
     <h2>Why Clean and Standardize Text?</h2>
     <ul>
-      <li><strong>PDF Formatting Artifacts:</strong> Copying paragraphs from PDF files often results in ragged, jagged line breaks at unpredictable margins. Our PDF cleaner restores uniform paragraph flow seamlessly.</li>
-      <li><strong>Developer & Data Operations:</strong> Strip zero-width Unicode characters, escape complex multiline strings into JSON parameters, or convert raw CSV lists into GitHub-compatible Markdown tables instantly.</li>
-      <li><strong>AI & LLM Sanitization:</strong> Easily remove asterisks, hash headers, and bold formatting symbols injected by chat assistants before pasting them into clean emails or formal documents.</li>
-      <li><strong>Subtitles to Articles:</strong> Turn timestamped `.srt` or `.vtt` movie subtitle files into readable prose or book drafts in a single second.</li>
+      <li><strong>PDF Formatting Artifacts:</strong> Copying paragraphs from PDF files often results in ragged line breaks. Our PDF cleaner restores uniform paragraph flow effortlessly.</li>
+      <li><strong>Developer & Data Operations:</strong> Strip zero-width Unicode characters, escape multiline strings into JSON parameters, or convert raw CSV lists into GitHub-compatible Markdown tables instantly.</li>
+      <li><strong>Creative & Fun Transformations:</strong> Turn regular phrases into glitch horror text, upside-down unicode strings, morse codes, or viral social media meme casings.</li>
     </ul>
 
     <h2>Privacy & Security Guarantee</h2>
@@ -227,13 +242,11 @@
   }
 
   function stripInvisibleChars() {
-    // Strips zero-width spaces, joiners, non-joiners, BOM, and hidden directional control marks
     el.value = el.value.replace(/[\u200B-\u200D\uFEFF\u200E\u200F\u00A0]/g, ' ');
     updateMetrics();
   }
 
   function fixPdfLineBreaks() {
-    // Glues lines broken awkwardly unless preceded by sentence-ending punctuation
     el.value = el.value.replace(/([^\.\?\!\:\n])\r?\n([^\r\n])/g, '$1 $2');
     updateMetrics();
   }
@@ -257,7 +270,6 @@
 
   // --- Format Converters ---
   function convertSrtToText() {
-    // Removes SRT numbers and timestamps (00:00:00,000 --> 00:00:00,000)
     let cleaned = el.value
       .replace(/^\d+\s*$/gm, '')
       .replace(/^\d{2}:\d{2}:\d{2}[,\.]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[,\.]\d{3}.*$/gm, '')
@@ -267,7 +279,6 @@
   }
 
   function cleanChatLogs() {
-    // Strips timestamps like [12/04/2026, 10:30] or 10:30 AM - Name:
     el.value = el.value
       .replace(/^\[?(\d{1,4}[-\/\.]\d{1,2}[-\/\.]\d{1,4})?,?\s*(\d{1,2}:\d{2}(:\d{2})?(\s?[APap][Mm])?)\]?\s*(-|–)?\s*/gm, '');
     updateMetrics();
@@ -324,27 +335,18 @@
   }
 
   function toSnakeCase() {
-    el.value = el.value
-      .replace(/\W+/g, " ")
-      .trim()
-      .replace(/\s+/g, "_")
-      .toLowerCase();
+    el.value = el.value.replace(/\W+/g, " ").trim().replace(/\s+/g, "_").toLowerCase();
     updateMetrics();
   }
 
   function toKebabCase() {
-    el.value = el.value
-      .replace(/\W+/g, " ")
-      .trim()
-      .replace(/\s+/g, "-")
-      .toLowerCase();
+    el.value = el.value.replace(/\W+/g, " ").trim().replace(/\s+/g, "-").toLowerCase();
     updateMetrics();
   }
 
   // --- Lists & Sorting ---
   function deduplicateLines() {
-    const lines = el.value.split(/\r?\n/);
-    el.value = Array.from(new Set(lines)).join('\n');
+    el.value = Array.from(new Set(el.value.split(/\r?\n/))).join('\n');
     updateMetrics();
   }
 
@@ -382,7 +384,6 @@
   }
 
   function stripUrlTrackers() {
-    // Strips tracking markers like ?utm_*, &fbclid=, etc.
     el.value = el.value.replace(/https?:\/\/[^\s]+/g, (url) => {
       try {
         let u = new URL(url);
@@ -396,6 +397,72 @@
   function extractUrlsOnly() {
     const urls = el.value.match(/https?:\/\/[^\s]+/g) || [];
     el.value = urls.join('\n');
+    updateMetrics();
+  }
+
+  // --- Fun & Creative ---
+  function toUpsideDown() {
+    const normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?.!,";
+    const upside = "ɐqɔpǝɟɓɥıɾʞןɯuodbɹsʇnʌʍxʎz∀ᗺƆᗡƎℲ⅁HIſʞ˥WNOԀΌᴚS⊥∩ΛMX⅄Z0ƖᄅƐㄣϛ9ㄥ86¿˙¡'⸲";
+    el.value = el.value.split('').reverse().map(c => {
+      const idx = normal.indexOf(c);
+      return idx !== -1 ? upside[idx] : c;
+    }).join('');
+    updateMetrics();
+  }
+
+  function toZalgo() {
+    const zalgoUp = ['̍','̎','̄','̅','̿','̑','̆','̐','͒','͗','͑','̇','̈','̊','͂','̓','̈','͊','͋','͌'];
+    const zalgoDown = ['̖','̗','̘','̙','̜','̝','̞','̟','̠','̤','̥','̦','̩','̪','̫','̬','̭','̮','̯'];
+    el.value = el.value.split('').map(c => {
+      if (c === ' ') return c;
+      return c + zalgoUp[Math.floor(Math.random() * zalgoUp.length)] + zalgoDown[Math.floor(Math.random() * zalgoDown.length)];
+    }).join('');
+    updateMetrics();
+  }
+
+  function toMockingCase() {
+    el.value = el.value.split('').map((c, i) => i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()).join('');
+    updateMetrics();
+  }
+
+  function toMorseCode() {
+    const morseMap = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....',
+      'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.',
+      'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'
+    };
+    el.value = el.value.toUpperCase().split('').map(c => morseMap[c] || c).join(' ');
+    updateMetrics();
+  }
+
+  function toBinary() {
+    el.value = el.value.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+    updateMetrics();
+  }
+
+  function scrambleWords() {
+    el.value = el.value.replace(/\b(\w)(\w+)(\w)\b/g, (m, first, mid, last) => {
+      const arr = mid.split('').sort(() => 0.5 - Math.random());
+      return first + arr.join('') + last;
+    });
+    updateMetrics();
+  }
+
+  function textToEmoji() {
+    const emojiMap = {
+      'love': '❤️', 'fire': '🔥', 'smile': '😊', 'happy': '😄', 'sad': '😢', 'cool': '😎',
+      'money': '💰', 'car': '🚗', 'star': '⭐', 'coffee': '☕', 'cat': '🐱', 'dog': '🐶',
+      'yes': '✅', 'no': '❌', 'heart': '💖', 'idea': '💡', 'sun': '☀️', 'moon': '🌙'
+    };
+    let txt = el.value;
+    for (const [w, emo] of Object.entries(emojiMap)) {
+      const regex = new RegExp(`\\b${w}\\b`, 'gi');
+      txt = txt.replace(regex, emo);
+    }
+    el.value = txt;
     updateMetrics();
   }
 </script>
